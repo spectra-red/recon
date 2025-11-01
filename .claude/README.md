@@ -1,10 +1,10 @@
 # Claude Code Agent & Skill System
 
-This repository contains a comprehensive multi-agent system for automated context research, PRD generation, and implementation planning, built for use with Claude Code.
+This repository contains a comprehensive multi-agent system for automated context research, PRD generation, implementation planning, and **full PRD execution**, built for use with Claude Code.
 
 ## System Overview
 
-Three major agent orchestration systems:
+Four major agent orchestration systems:
 
 ### 1. Context Research System
 **Purpose**: Gather comprehensive implementation context for features/tasks
@@ -26,6 +26,13 @@ Three major agent orchestration systems:
 **Command**: `/plan-implementation`
 
 **Architecture**: Architect-Planner agent + optional research agents
+
+### 4. PRD Builder System 🆕
+**Purpose**: Build complete, production-ready software from PRDs using a team of intelligent agents
+
+**Command**: `/build-prd`
+
+**Architecture**: PRD Builder + 7 context research agents + team of parallel builder agents
 
 ---
 
@@ -169,6 +176,171 @@ Complete **Implementation Plan** with:
 
 ---
 
+## PRD Builder System 🆕
+
+### Components
+
+#### Agents
+- **`prd-builder.md`** - The builder who assembles and coordinates a team of agents to build software
+- **`builder-agent.md`** - Team member who builds specific components from specifications
+
+#### Skill
+- **`current-state-analysis`** - Analyzes codebase to determine what exists vs what needs to be built
+
+#### Command
+- **`/build-prd`** - Build a complete software implementation from a PRD
+
+### Workflow
+
+1. **Analyze** PRD and understand what to build (5-10 min)
+2. **Assemble research team** - Deploy 7 context agents in parallel (5-10 min):
+   - current-state-analysis (what exists vs needed)
+   - codebase-pattern-analysis (find reusable patterns)
+   - file-structure-mapping (understand organization)
+   - dependency-research (identify libraries)
+   - api-context-gathering (document APIs)
+   - integration-point-mapping (map connections)
+   - technical-research (best practices)
+3. **Create build plan** with architect-planner (10-15 min):
+   - Design technical architecture
+   - Break into buildable components
+   - Sequence by dependencies
+   - Organize into parallel build waves
+4. **Direct builder team** in parallel waves (varies by PRD size):
+   - Wave 1: Foundation team (database, types, interfaces)
+   - Wave 2: Core services team (business logic, services)
+   - Wave 3: Integration team (APIs, workflows, CLI)
+   - Wave 4: Quality team (testing and polish)
+   - Each wave: multiple builder agents working in parallel
+5. **Quality assurance** (15-30 min):
+   - Run all tests
+   - Perform integration testing
+   - Verify PRD requirements
+   - Assess build quality
+6. **Deliver** with comprehensive build report (10 min)
+
+**Total Time**:
+- Small PRD (1-2 weeks): 3-5 hours
+- Medium PRD (3-8 weeks): 8-14 hours
+- Large PRD (8-20 weeks): 23-43 hours
+
+### Output
+
+Complete **Working Software** with:
+- **Source Code**: All files created/modified with proper Go conventions
+- **Tests**: Comprehensive test suite with >80% coverage
+- **Documentation**: Godoc comments, README updates, architecture docs
+- **Build**: Fully buildable, all tests passing
+- **Build Report**:
+  - Requirements completion checklist (P0/P1/P2)
+  - Build statistics (files, LOC, coverage)
+  - Quality metrics (tests, linting, performance)
+  - Outstanding issues and blockers
+  - Next steps and recommendations
+
+### Key Features
+
+- **Team-Based Building**: PRD Builder coordinates specialized builder agents
+- **Intelligent Coordination**: Maximizes parallelization across 10+ agents
+- **Context-Aware**: Research team gathers comprehensive codebase understanding
+- **Quality-Driven**: Tests, linting, and validation built-in
+- **Wave-Based Building**: Sequences work by dependencies, parallel execution within waves
+- **Production-Ready**: Code follows conventions, includes tests, builds successfully
+- **Progress Tracking**: Clear visibility into build progress and team status
+- **Adaptive**: Handles blockers, adjusts plans, resolves issues automatically
+
+### Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    PRD Builder                               │
+│  - Analyzes what needs to be built                           │
+│  - Assembles and directs specialized agent teams             │
+│  - Monitors build progress and quality                       │
+└─────────────────┬───────────────────────────────────────────┘
+                  │
+        ┌─────────┴─────────┐
+        │                   │
+  Research Team        Builder Team
+    (Parallel)          (Wave-Based)
+        │                   │
+        │                   │
+┌───────▼──────────┐  ┌────▼─────────────────────────────────┐
+│  7 Research      │  │  Wave 1: Foundation Team             │
+│  Agents          │  │  ├─ builder-agent (DB schema)        │
+│  (Concurrent)    │  │  ├─ builder-agent (types)            │
+│                  │  │  └─ builder-agent (config)           │
+│  1. current-     │  │                                      │
+│     state        │  │  Wave 2: Core Services Team          │
+│  2. codebase     │  │  ├─ builder-agent (parser)           │
+│  3. file-struct  │  │  ├─ builder-agent (enricher)         │
+│  4. dependencies │  │  └─ builder-agent (query)            │
+│  5. api-context  │  │                                      │
+│  6. integration  │  │  Wave 3: Integration Team            │
+│  7. technical    │  │  ├─ builder-agent (API)              │
+│                  │  │  ├─ builder-agent (CLI)              │
+│  Runs: 5-10 min  │  │  └─ builder-agent (workflows)        │
+└──────────────────┘  │                                      │
+                      │  Wave 4: Quality Team                │
+                      │  ├─ builder-agent (tests)            │
+                      │  └─ builder-agent (docs)             │
+                      │                                      │
+                      │  Each wave: Team members work in     │
+                      │  parallel, wave completes together   │
+                      └──────────────────────────────────────┘
+```
+
+### Build Example
+
+```
+User: /build-prd SPECTRA_RED_PRD_ENGINEERING_FOCUSED.md
+
+PRD Builder:
+├─ Phase 1: Analyzing PRD (5 min)
+│  └─ Identified: 16 components, 47 tasks
+│
+├─ Phase 2: Assembling Research Team (7 min parallel)
+│  ├─ current-state-analysis → Gap analysis complete
+│  ├─ codebase-pattern-analysis → Patterns found
+│  ├─ file-structure-mapping → Structure mapped
+│  ├─ dependency-research → 13 deps needed
+│  ├─ api-context-gathering → APIs documented
+│  ├─ integration-point-mapping → Integrations mapped
+│  └─ technical-research → Best practices gathered
+│
+├─ Phase 3: Creating Build Plan (12 min)
+│  └─ architect-planner → 4 waves, 47 tasks
+│
+├─ Phase 4: Directing Builder Team
+│  │
+│  ├─ Wave 1: Foundation (2 hours, 8 parallel)
+│  │  ├─ Task 1-8: Database schema ✓
+│  │  ├─ Task 9-12: Core types ✓
+│  │  └─ All tests passing (87% coverage)
+│  │
+│  ├─ Wave 2: Services (3 hours, 10 parallel)
+│  │  ├─ Task 13-22: Core logic ✓
+│  │  └─ All tests passing (91% coverage)
+│  │
+│  ├─ Wave 3: Integration (2.5 hours, 8 parallel)
+│  │  ├─ Task 23-36: APIs, CLI, workflows ✓
+│  │  └─ All tests passing (89% coverage)
+│  │
+│  └─ Wave 4: Polish (1 hour, 4 parallel)
+│     ├─ Task 37-42: Tests and docs ✓
+│     └─ All tests passing (92% coverage)
+│
+├─ Phase 5: Validation (25 min)
+│  ├─ Integration tests: ✓ 47/47 passing
+│  ├─ Build: ✓ Successful
+│  └─ Requirements: ✓ 16/16 complete
+│
+└─ Phase 6: Completion Report
+   └─ Delivered: Working implementation with 92% coverage
+```
+
+---
+
 ## Key Design Principles
 
 ### 1. Concurrent Fan-Out Pattern
@@ -262,6 +434,35 @@ I want to build a feature that lets users export their data to CSV, Excel, and P
 
 **Generates Implementation Plan** with:
 - Complete system architecture with diagrams
+
+---
+
+### PRD Building 🆕
+
+```
+/build-prd
+
+SPECTRA_RED_PRD_ENGINEERING_FOCUSED.md
+```
+
+**PRD Builder workflow**:
+1. Analyzes what needs to be built (5-10 min)
+2. Assembles research team - 7 agents in parallel (5-10 min)
+3. Creates build plan with architect-planner (10-15 min)
+4. Directs builder teams in parallel waves (varies):
+   - Wave 1: Foundation team - 8 parallel builders
+   - Wave 2: Services team - 10 parallel builders
+   - Wave 3: Integration team - 8 parallel builders
+   - Wave 4: Quality team - 4 parallel builders
+5. Quality assurance validation (15-30 min)
+6. Generates build report (10 min)
+
+**Delivers Working Software** with:
+- All source files created/modified
+- Comprehensive test suite (>80% coverage)
+- Complete documentation
+- Build passing, all tests green
+- Build report with metrics
 - Component specifications (purpose, interfaces, data models)
 - 20-50 granular tasks with:
   - Step-by-step implementation guidance
@@ -277,9 +478,9 @@ I want to build a feature that lets users export their data to CSV, Excel, and P
 
 ---
 
-## Complete Workflow Example
+## Complete Workflow Examples
 
-**Full Product Development Cycle**:
+### Full Product Development Cycle (Idea → Working Code)
 
 ```bash
 # Step 1: Create PRD
@@ -287,6 +488,31 @@ I want to build a feature that lets users export their data to CSV, Excel, and P
 > Build analytics dashboard with user engagement metrics
 
 # Gets: Market-researched PRD with competitive analysis
+
+# Step 2: Build from PRD (NEW! 🆕)
+/build-prd
+> [Paste the PRD from Step 1]
+
+# The PRD Builder assembles teams and builds the software:
+#   - Research team gathers context (7 agents, 7 min)
+#   - Architect plans the build (15 min)
+#   - Builder teams work in parallel waves (8-14 hours)
+#   - Quality team validates (30 min)
+#
+# Gets: Complete working software
+#   - All source code files
+#   - Comprehensive test suite
+#   - Documentation
+#   - Passing build
+# Total time: ~8-14 hours (parallel team execution)
+```
+
+### Traditional Development Cycle (Planning → Manual Implementation)
+
+```bash
+# Step 1: Create PRD
+/create-prd
+> Build analytics dashboard with user engagement metrics
 
 # Step 2: Plan Implementation
 /plan-implementation
@@ -299,6 +525,8 @@ I want to build a feature that lets users export their data to CSV, Excel, and P
 > Implement task T-5: Dashboard data API endpoint
 
 # Gets: Codebase patterns, integration points, implementation guide
+
+# Step 4: Manual implementation by developer
 ```
 
 ---
@@ -312,7 +540,9 @@ I want to build a feature that lets users export their data to CSV, Excel, and P
 ├── agents/
 │   ├── context-orchestrator.md
 │   ├── prd-orchestrator.md
-│   └── architect-planner.md
+│   ├── architect-planner.md
+│   ├── prd-builder.md 🆕
+│   └── builder-agent.md 🆕
 │
 ├── skills/
 │   ├── codebase-pattern-analysis/
@@ -326,6 +556,8 @@ I want to build a feature that lets users export their data to CSV, Excel, and P
 │   ├── requirements-analysis/
 │   │   └── SKILL.md
 │   ├── integration-point-mapping/
+│   │   └── SKILL.md
+│   ├── current-state-analysis/ 🆕
 │   │   └── SKILL.md
 │   ├── market-research/
 │   │   └── SKILL.md
@@ -343,7 +575,8 @@ I want to build a feature that lets users export their data to CSV, Excel, and P
 └── commands/
     ├── research-context.md
     ├── create-prd.md
-    └── plan-implementation.md
+    ├── plan-implementation.md
+    └── build-prd.md 🆕
 ```
 
 ---
@@ -382,6 +615,19 @@ This system was built based on research from:
 - **Time**: 10-18 minutes
 - **Token Usage**: ~250k-350k tokens
 - **Output**: 5000-10000 word comprehensive PRD
+
+### PRD Builder System 🆕
+- **Agents**: 7 concurrent (research team) + 4-30 concurrent (builder team waves)
+- **Time**:
+  - Small PRD (1-2 weeks): 3-5 hours
+  - Medium PRD (3-8 weeks): 8-14 hours
+  - Large PRD (8-20 weeks): 23-43 hours
+- **Token Usage**: ~500k-2M tokens (varies by PRD complexity)
+- **Output**:
+  - Complete working software
+  - Test suite with >80% coverage
+  - Documentation and build report
+  - 1000-10000+ lines of production code
 
 ---
 
@@ -467,10 +713,20 @@ This agent system was created for use within the Recon project's Conductor works
 
 ## Changelog
 
+### v2.0.0 (2025-11-01) 🆕
+- **PRD Builder System** - Build complete software from PRDs using intelligent agent teams
+- Added `prd-builder` agent - Assembles and coordinates specialized builder agent teams
+- Added `builder-agent` - Team member who builds specific components from specifications
+- Added `current-state-analysis` skill - Analyzes what exists vs what needs to be built
+- Added `/build-prd` command - Build complete software from a PRD
+- Enhanced architecture with 4 major systems (was 3)
+- Total: 5 agents, 13 skills, 4 slash commands
+
 ### v1.0.0 (2025-11-01)
 - Initial implementation
 - Context Research System (6 agents)
 - PRD Generation System (10 research + 2 synthesis agents)
+- Implementation Planning System
 - 12 total skills created
-- 2 slash commands
+- 3 slash commands
 - Complete documentation
