@@ -1,10 +1,10 @@
 # Claude Code Agent & Skill System
 
-This repository contains a comprehensive multi-agent system for automated context research and PRD generation, built for use with Claude Code.
+This repository contains a comprehensive multi-agent system for automated context research, PRD generation, and implementation planning, built for use with Claude Code.
 
 ## System Overview
 
-Two major agent orchestration systems:
+Three major agent orchestration systems:
 
 ### 1. Context Research System
 **Purpose**: Gather comprehensive implementation context for features/tasks
@@ -19,6 +19,13 @@ Two major agent orchestration systems:
 **Command**: `/create-prd`
 
 **Architecture**: Orchestrator + 10 concurrent research agents (6 local + 4 web)
+
+### 3. Implementation Planning System
+**Purpose**: Transform PRDs into technical architectures and actionable task breakdowns
+
+**Command**: `/plan-implementation`
+
+**Architecture**: Architect-Planner agent + optional research agents
 
 ---
 
@@ -119,6 +126,49 @@ Complete PRD with 9 sections (OpenAI template):
 
 ---
 
+## Implementation Planning System
+
+### Components
+
+#### Agent
+- **`architect-planner.md`** - Transforms PRDs into technical architectures and implementation plans
+
+#### Command
+- **`/plan-implementation`** - Invoke the architect-planner
+
+### Workflow
+
+1. **Ingest** PRD and analyze requirements (2-3 min)
+2. **Research** missing context with agents if needed (3-5 min, optional)
+3. **Design** technical architecture (5-10 min)
+4. **Breakdown** into granular, sequenced tasks (5-10 min)
+5. **Create** implementation roadmap with milestones (3-5 min)
+
+**Total Time**: 15-30 minutes
+
+### Output
+
+Complete **Implementation Plan** with:
+- **Technical Architecture**: System design, components, data flow, integrations
+- **Component Specifications**: Purpose, interfaces, data models, implementation approach
+- **Task Breakdown**: Granular, testable, sequenced tasks with acceptance criteria
+- **Implementation Roadmap**: Milestones, timeline, dependencies, parallel work
+- **Risk Assessment**: Technical risks and mitigation strategies
+- **Testing Strategy**: Unit, integration, E2E test plans
+- **Deployment Plan**: Environments, release strategy, rollback plan
+- **Resource Plan**: Team size, skills, external dependencies
+
+### Key Features
+
+- **PRD to Tasks**: Transforms "what to build" into "how to build it"
+- **Granular Decomposition**: Atomic tasks (1-4 hours each), testable, independent
+- **Smart Sequencing**: Risk-first, dependency-aware, enables incremental validation
+- **Optional Research**: Launches context research agents if technical details missing
+- **Implementation-Ready**: Step-by-step guidance for developers
+- **Milestone-Based**: Clear checkpoints with success criteria
+
+---
+
 ## Key Design Principles
 
 ### 1. Concurrent Fan-Out Pattern
@@ -194,6 +244,65 @@ I want to build a feature that lets users export their data to CSV, Excel, and P
 
 ---
 
+### Implementation Planning
+
+```
+/plan-implementation
+
+[Provide PRD or feature description]
+```
+
+**Agent workflow**:
+1. Ingests PRD and analyzes requirements
+2. Identifies knowledge gaps
+3. Launches research agents if needed (optional, parallel)
+4. Designs technical architecture
+5. Breaks down into granular tasks
+6. Creates implementation roadmap
+
+**Generates Implementation Plan** with:
+- Complete system architecture with diagrams
+- Component specifications (purpose, interfaces, data models)
+- 20-50 granular tasks with:
+  - Step-by-step implementation guidance
+  - File paths to create/modify
+  - Dependencies and APIs to use
+  - Testing approach
+  - Estimated effort
+- Milestones with success criteria
+- Task sequencing and dependencies
+- Timeline visualization
+- Risk assessment
+- Testing and deployment strategy
+
+---
+
+## Complete Workflow Example
+
+**Full Product Development Cycle**:
+
+```bash
+# Step 1: Create PRD
+/create-prd
+> Build analytics dashboard with user engagement metrics
+
+# Gets: Market-researched PRD with competitive analysis
+
+# Step 2: Plan Implementation
+/plan-implementation
+> [Paste the PRD from Step 1]
+
+# Gets: Technical architecture + 30 sequenced tasks
+
+# Step 3: Research Context (for individual tasks)
+/research-context
+> Implement task T-5: Dashboard data API endpoint
+
+# Gets: Codebase patterns, integration points, implementation guide
+```
+
+---
+
 ## File Structure
 
 ```
@@ -202,7 +311,8 @@ I want to build a feature that lets users export their data to CSV, Excel, and P
 │
 ├── agents/
 │   ├── context-orchestrator.md
-│   └── prd-orchestrator.md
+│   ├── prd-orchestrator.md
+│   └── architect-planner.md
 │
 ├── skills/
 │   ├── codebase-pattern-analysis/
@@ -232,7 +342,8 @@ I want to build a feature that lets users export their data to CSV, Excel, and P
 │
 └── commands/
     ├── research-context.md
-    └── create-prd.md
+    ├── create-prd.md
+    └── plan-implementation.md
 ```
 
 ---
