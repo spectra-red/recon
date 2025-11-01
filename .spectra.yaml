@@ -1,0 +1,45 @@
+# Spectra-Red CLI Configuration File
+# 
+# This file can be placed in one of the following locations:
+#   - ./.spectra.yaml (current directory)
+#   - ~/.spectra/.spectra.yaml (home directory)
+#   - /etc/spectra/config.yaml (system-wide)
+#
+# Configuration precedence: flags > environment variables > config file > defaults
+
+# API Configuration
+api:
+  # API endpoint URL
+  # Default: http://localhost:3000
+  # Environment: SPECTRA_API_URL
+  url: http://localhost:3000
+
+  # API request timeout
+  # Default: 30s
+  # Environment: SPECTRA_API_TIMEOUT
+  timeout: 30s
+
+# Scanner Configuration
+scanner:
+  # Ed25519 public key for signature verification
+  # Generate with: spectra keys generate
+  # Environment: SPECTRA_SCANNER_PUBLIC_KEY
+  public_key: ""
+
+  # Ed25519 private key for signing scan submissions
+  # IMPORTANT: Keep this secret! Never commit to version control.
+  # Environment: SPECTRA_SCANNER_PRIVATE_KEY
+  private_key: ""
+
+# Output Configuration
+output:
+  # Output format for query results
+  # Options: json, yaml, table
+  # Default: json
+  # Environment: SPECTRA_OUTPUT_FORMAT
+  format: json
+
+  # Enable colored output
+  # Default: true
+  # Environment: SPECTRA_OUTPUT_COLOR
+  color: true

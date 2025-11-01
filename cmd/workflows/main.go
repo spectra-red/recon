@@ -11,6 +11,7 @@ import (
 
 	restate "github.com/restatedev/sdk-go"
 	"github.com/restatedev/sdk-go/server"
+	"github.com/spectra-red/recon/internal/enrichment"
 	"github.com/spectra-red/recon/internal/workflows"
 	"github.com/surrealdb/surrealdb.go"
 	"go.uber.org/zap"
@@ -65,13 +66,56 @@ func main() {
 		zap.String("namespace", surrealNS),
 		zap.String("database", surrealDB))
 
+	// Initialize ASN client
+	// Get ASN client configuration from environment
+	asnRateLimit := 100                // Default: 100 req/min
+	asnCacheTTL := 24 * time.Hour      // Default: 24 hours
+	asnClient := enrichment.NewTeamCymruClient(asnRateLimit, asnCacheTTL)
+
+	logger.Info("initialized ASN client",
+		zap.Int("rate_limit_per_min", asnRateLimit),
+		zap.Duration("cache_ttl", asnCacheTTL))
+
+	// Initialize GeoIP client
+	geoipMMDBPath := getEnv("GEOIP_MMDB_PATH", "/var/lib/GeoIP/GeoLite2-City.mmdb")
+	geoipAPIKey := getEnv("GEOIP_API_KEY", "")
+
+	geoClient, err := enrichment.NewGeoIPClient(enrichment.GeoIPConfig{
+		MMDBPath: geoipMMDBPath,
+		APIKey:   geoipAPIKey,
+	})
+	if err != nil {
+		logger.Warn("GeoIP client initialization had warnings",
+			zap.Error(err),
+			zap.String("mmdb_path", geoipMMDBPath))
+	}
+	if geoClient != nil {
+		defer geoClient.Close()
+		logger.Info("GeoIP client initialized",
+			zap.String("mmdb_path", geoipMMDBPath))
+	}
+
+	// Get NVD API key from environment
+	nvdAPIKey := getEnv("NVD_API_KEY", "")
+	if nvdAPIKey == "" {
+		logger.Warn("NVD_API_KEY not set, using public rate limit (5 req/30s)")
+	}
+
 	// Initialize workflows
 	ingestWorkflow := workflows.NewIngestWorkflow(db)
+	enrichASNWorkflow := workflows.NewEnrichASNWorkflow(db, asnClient)
+	enrichGeoWorkflow := workflows.NewEnrichGeoWorkflow(db, geoClient, logger)
+	enrichCPEWorkflow := workflows.NewEnrichCPEWorkflow(db, nvdAPIKey)
+
+	logger.Info("workflows initialized",
+		zap.Bool("nvd_api_key_configured", nvdAPIKey != ""))
 
 	// Create Restate server and register workflows
-	restateServer := server.NewRestate().Bind(
-		restate.Reflect(ingestWorkflow),
-	)
+	restateServer := server.NewRestate().
+		Bind(restate.Reflect(ingestWorkflow)).
+		Bind(restate.Reflect(enrichASNWorkflow)).
+		Bind(restate.Reflect(enrichGeoWorkflow)).
+		Bind(restate.Reflect(enrichCPEWorkflow))
 
 	// Get HTTP handler
 	handler, err := restateServer.Handler()

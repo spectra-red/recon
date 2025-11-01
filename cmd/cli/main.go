@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/spectra-red/recon/internal/cli"
 )
 
 var rootCmd = &cobra.Command{
@@ -17,7 +18,19 @@ Use this CLI to scan targets, query the mesh, and contribute to the community.`,
 }
 
 func init() {
-	// Subcommands will be added here
+	// Create jobs command group
+	jobsCmd := cli.NewJobsCommand()
+
+	// Add subcommands
+	jobsCmd.AddCommand(cli.NewJobsListCommand())
+	jobsCmd.AddCommand(cli.NewJobsGetCommand())
+
+	// Register commands with root command
+	rootCmd.AddCommand(jobsCmd)
+	rootCmd.AddCommand(cli.NewIngestCommand())
+	rootCmd.AddCommand(cli.QueryCmd)
+
+	// Future commands will be added here
 	// rootCmd.AddCommand(scanCmd)
 	// rootCmd.AddCommand(meshCmd)
 	// rootCmd.AddCommand(authCmd)
