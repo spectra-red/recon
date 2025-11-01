@@ -1,0 +1,88 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+docs/
+.claude/
+
+# Development files
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build artifacts
+bin/
+dist/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test files
+*_test.go
+testdata/
+coverage.out
+*.test
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Dependencies (will be downloaded in container)
+vendor/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Data files
+data/
+*.db
+*.mmdb
+
+# Research and planning
+*_RESEARCH.md
+*_PRD*.md
+*_PLAN*.md
+EXECUTIVE_SUMMARY*.txt
+MARKET_*.md
+USER_RESEARCH*.md
+TECHNICAL_RESEARCH.md
+SECURITY_*.md
+PLANNING_*.md
+RESEARCH_*.md
+*_INDEX.md
+*_SUMMARY.md
+*_CONTEXT*.md
+*_REFERENCE.md
+*_GUIDE.md
+*_DEEP_DIVE.md
+IMPLEMENTATION_ROADMAP.md
+DETAILED_IMPLEMENTATION_PLAN.md
+TERMS.md
+LICENCE*.md
