@@ -132,7 +132,24 @@ Once all agents complete (5-10 min):
 - Identify any remaining gaps
 - Highlight critical findings for implementation
 
-### Phase 3: Architecture & Planning (10-15 minutes)
+### Phase 3: Architecture & Planning (0-15 minutes)
+
+**3.0 Check for Existing Planning Artifacts (FIRST!)**
+
+**ALWAYS check for these files first** before creating a new plan:
+- `DETAILED_IMPLEMENTATION_PLAN.md` - Complete technical architecture and task breakdown
+- `IMPLEMENTATION_ROADMAP.md` - Milestones and timeline
+- Other planning documents in workspace root
+
+**If planning artifacts exist:**
+- Read and analyze existing plan
+- Validate against PRD requirements
+- Use as primary planning source
+- **Skip re-planning (saves 10-15 minutes!)**
+- Proceed directly to Phase 4 with existing plan
+
+**If no planning artifacts exist:**
+- Proceed to 3.1 to create new plan
 
 **3.1 Create or Refine Technical Architecture**
 
@@ -188,18 +205,42 @@ For each wave of parallel tasks:
 
 **CRITICAL**: Launch ALL independent tasks in a **single message with multiple Task tool calls**.
 
+**When launching each builder agent, provide:**
+1. **Task specification** from implementation plan
+2. **Planning context** - Reference to DETAILED_IMPLEMENTATION_PLAN.md and specific task details
+3. **Architecture context** - Relevant architectural decisions
+4. **Pattern guidance** - Conventions from codebase analysis
+5. **Integration points** - How this task connects to others
+
+**Example builder agent prompt:**
 ```markdown
 Wave 1 - Foundation Layer (5 parallel tasks)
 
 Launching 5 implementation agents concurrently:
 
-[Uses Task tool with feature-implementer agent 5 times in single message]
+[Task tool for builder-agent]
 
-Task 1: Create SurrealDB schema for host table
-Task 2: Create SurrealDB schema for port table
-Task 3: Create SurrealDB schema for service table
-Task 4: Define core Go types and interfaces
-Task 5: Set up database connection and client
+You are building Task T-1 from DETAILED_IMPLEMENTATION_PLAN.md:
+
+**Task**: Create SurrealDB schema for host table
+
+**From Implementation Plan (DETAILED_IMPLEMENTATION_PLAN.md:75-95)**:
+- Component: Database Layer (internal/db/schema/)
+- Architecture: Multi-model SurrealDB with graph + vector capabilities
+- File: internal/db/schema/host.surql
+- Acceptance Criteria: [list from plan]
+- Integration: Used by mesh ingest API and query engine
+
+**Architecture Context**:
+- SurrealDB cluster setup per section 1.1 of implementation plan
+- Temporal versioning required for all observation records
+- Graph relationships to ports and services
+
+**Patterns**:
+- Follow schema patterns from SURREALDB_SCHEMA_GUIDE.md
+- Use table-driven tests per GO_PATTERNS_REFERENCE.md
+
+Build this component following the detailed specification in the implementation plan.
 ```
 
 Wait for all Wave 1 tasks to complete before starting Wave 2.

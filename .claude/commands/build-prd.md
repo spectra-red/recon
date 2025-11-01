@@ -26,6 +26,13 @@ Then provide the PRD when prompted, either by:
 - Pasting the PRD content directly
 - Describing requirements for the builder to analyze
 
+**Optional**: You can also provide planning artifacts from `/plan-implementation`:
+- `DETAILED_IMPLEMENTATION_PLAN.md` - Complete technical architecture and task breakdown
+- `IMPLEMENTATION_ROADMAP.md` - Milestones and timeline
+- Any other planning documents
+
+The builder will automatically detect and use these planning files to inform the build process.
+
 ### What Happens Next
 
 The PRD Builder will assemble and direct its team:
@@ -47,6 +54,9 @@ The PRD Builder will assemble and direct its team:
    - Synthesizes team findings into unified context
 
 3. **Create build plan** (10-15 minutes)
+   - **Checks for existing planning artifacts** (DETAILED_IMPLEMENTATION_PLAN.md, IMPLEMENTATION_ROADMAP.md)
+   - **Uses existing plans if available** (skip re-planning)
+   - **Or creates new plan** using architect-planner agent if needed
    - Designs technical architecture
    - Breaks down into buildable components
    - Sequences work by dependencies
@@ -115,11 +125,13 @@ Key findings:
 - Architecture: Matches PRD specification
 - Estimated effort: 20 weeks (160 hours)
 
-**Creating implementation plan with architect-planner agent...**
+**Checking for existing planning artifacts...**
 
-[Plan created in 10-15 minutes]
+Found DETAILED_IMPLEMENTATION_PLAN.md and IMPLEMENTATION_ROADMAP.md!
 
-**Implementation Plan Complete**
+Using existing planning documents - skipping re-planning to save time.
+
+**Implementation Plan Loaded**
 
 Breaking down into 4 waves with 47 total tasks:
 - Wave 1 (Foundation): 12 tasks - 8 can run in parallel
@@ -301,21 +313,29 @@ After each wave:
 > [Provide feature spec + context]
 ```
 
-### Planning-First Flow
+### Planning-First Flow (Recommended)
 
 ```bash
-# Plan first, execute later
+# Plan first, build later - this is the RECOMMENDED approach!
 
 # Step 1: Create implementation plan
 /plan-implementation
 > [Provide PRD]
-> [Get detailed task breakdown]
+> [Get DETAILED_IMPLEMENTATION_PLAN.md and IMPLEMENTATION_ROADMAP.md]
 
-# Step 2: Execute plan
-/execute-prd
-> [Provide PRD + implementation plan]
-> [Orchestrator executes the plan]
+# Step 2: Build from plan
+/build-prd
+> [Provide PRD]
+> [Builder automatically detects and uses planning files]
+> [No re-planning needed - saves 10-15 minutes!]
 ```
+
+**Why Planning-First?**
+- Detailed task breakdown before implementation
+- Architectural decisions documented
+- Builder agents have complete context
+- No duplicate planning effort
+- Faster overall execution
 
 ## Advanced Usage
 
