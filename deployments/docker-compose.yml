@@ -1,0 +1,108 @@
+services:
+  # SurrealDB - Graph + Vector Database
+  surrealdb:
+    image: surrealdb/surrealdb:latest
+    container_name: spectra-surrealdb
+    ports:
+      - "8000:8000"
+    command: start --log trace --user root --pass root memory
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - spectra-network
+    restart: unless-stopped
+
+  # Restate - Durable Workflow Orchestration
+  restate:
+    image: restatedev/restate:latest
+    container_name: spectra-restate
+    ports:
+      - "8080:8080"   # Ingress endpoint
+      - "9070:9070"   # Admin UI
+    environment:
+      - RUST_LOG=info
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9070/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - spectra-network
+    restart: unless-stopped
+    volumes:
+      - restate-data:/restate-data
+
+  # API Server - Go HTTP API
+  api:
+    build:
+      context: ..
+      dockerfile: deployments/Dockerfile.api
+    container_name: spectra-api
+    ports:
+      - "3000:3000"
+    environment:
+      - SURREALDB_URL=http://surrealdb:8000
+      - SURREALDB_USER=root
+      - SURREALDB_PASS=root
+      - RESTATE_URL=http://restate:8080
+      - PORT=3000
+      - LOG_LEVEL=info
+    depends_on:
+      surrealdb:
+        condition: service_healthy
+      restate:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - spectra-network
+    restart: unless-stopped
+
+  # Workflow Service - Restate Workflows
+  workflows:
+    build:
+      context: ..
+      dockerfile: deployments/Dockerfile.workflows
+    container_name: spectra-workflows
+    ports:
+      - "9080:9080"
+    environment:
+      - SURREALDB_URL=ws://surrealdb:8000/rpc
+      - SURREALDB_USER=root
+      - SURREALDB_PASS=root
+      - SURREALDB_NAMESPACE=spectra
+      - SURREALDB_DATABASE=intel_mesh
+      - PORT=9080
+      - LOG_LEVEL=info
+    depends_on:
+      surrealdb:
+        condition: service_healthy
+      restate:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9080/restate/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - spectra-network
+    restart: unless-stopped
+
+networks:
+  spectra-network:
+    driver: bridge
+    name: spectra-network
+
+volumes:
+  restate-data:
+    name: spectra-restate-data
