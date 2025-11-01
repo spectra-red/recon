@@ -1,73 +1,73 @@
-# Execute PRD Command
+# Build PRD Command
 
-Transform a Product Requirements Document (PRD) into working, production-ready software through intelligent orchestration of context-gathering and implementation sub-agents.
+Build complete, production-ready software from a Product Requirements Document using an intelligent team of specialized builder agents.
 
 ## What This Command Does
 
-This command launches the **PRD Execution Orchestrator** agent which:
+This command launches the **PRD Builder** agent which assembles and coordinates a team of specialized agents to build your software:
 
-1. **Analyzes** your PRD to understand all requirements
-2. **Gathers context** by launching 7+ research agents in parallel to understand current codebase state
-3. **Creates** a detailed technical architecture and implementation plan
-4. **Executes** the implementation by orchestrating specialized feature implementation agents in parallel waves
-5. **Validates** the final implementation against all PRD requirements
-6. **Delivers** a comprehensive execution report with working, tested code
+1. **Analyzes** your PRD to understand what needs to be built
+2. **Assembles a research team** - 7 context agents gather comprehensive codebase understanding in parallel
+3. **Creates** the build plan - detailed architecture and task assignments
+4. **Directs the builder team** - coordinates specialized builder agents working in parallel waves
+5. **Quality assurance** - validates the build against all PRD requirements
+6. **Delivers** production-ready software with comprehensive documentation and build report
 
 ## How to Use
 
 ### Basic Usage
 
 ```bash
-/execute-prd
+/build-prd
 ```
 
 Then provide the PRD when prompted, either by:
 - Specifying a PRD file path (e.g., `SPECTRA_RED_PRD_ENGINEERING_FOCUSED.md`)
 - Pasting the PRD content directly
-- Describing requirements for the orchestrator to analyze
+- Describing requirements for the builder to analyze
 
 ### What Happens Next
 
-The orchestrator will:
+The PRD Builder will assemble and direct its team:
 
 1. **Analyze your PRD** (5-10 minutes)
    - Parse all requirements
    - Identify components to build
    - Determine knowledge gaps
 
-2. **Gather comprehensive context** (5-10 minutes, parallel)
-   - Launch 7 context research agents concurrently:
-     - current-state-analysis
-     - codebase-pattern-analysis
-     - file-structure-mapping
-     - dependency-research
-     - api-context-gathering
-     - integration-point-mapping
-     - technical-research
-   - Synthesize findings into unified context
+2. **Assemble research team** (5-10 minutes, parallel)
+   - Deploys 7 context research agents concurrently:
+     - current-state-analysis (what exists vs what's needed)
+     - codebase-pattern-analysis (find reusable patterns)
+     - file-structure-mapping (understand organization)
+     - dependency-research (identify required libraries)
+     - api-context-gathering (document APIs)
+     - integration-point-mapping (map connections)
+     - technical-research (gather best practices)
+   - Synthesizes team findings into unified context
 
-3. **Plan the implementation** (10-15 minutes)
-   - Create/refine technical architecture
-   - Break down into granular tasks
-   - Sequence tasks by dependencies
-   - Group into parallel execution waves
+3. **Create build plan** (10-15 minutes)
+   - Designs technical architecture
+   - Breaks down into buildable components
+   - Sequences work by dependencies
+   - Organizes into parallel build waves
 
-4. **Execute in parallel waves** (varies by PRD size)
-   - Wave 1: Foundation (database, types, interfaces)
-   - Wave 2: Core logic (services, business logic)
-   - Wave 3: Integrations (APIs, workflows, CLI)
-   - Wave 4: Testing and polish
-   - Each wave runs independent tasks in parallel
+4. **Direct builder team in waves** (varies by PRD size)
+   - Wave 1: Foundation team (database, types, interfaces)
+   - Wave 2: Core services team (business logic, services)
+   - Wave 3: Integration team (APIs, workflows, CLI)
+   - Wave 4: Quality team (testing and polish)
+   - Each wave: multiple builder agents working in parallel
 
-5. **Validate implementation** (15-30 minutes)
-   - Run all tests
-   - Perform integration testing
-   - Validate against PRD requirements
-   - Assess code quality
+5. **Quality assurance** (15-30 minutes)
+   - Runs all tests
+   - Performs integration testing
+   - Validates against PRD requirements
+   - Assesses build quality
 
-6. **Generate completion report** (10 minutes)
+6. **Delivery report** (10 minutes)
    - Requirements completion status
-   - Implementation summary
+   - Build statistics
    - Quality metrics
    - Outstanding issues
    - Next steps
@@ -75,9 +75,9 @@ The orchestrator will:
 ## Example Interaction
 
 ```
-User: /execute-prd
+User: /build-prd
 
-Orchestrator: I'm the PRD Execution Orchestrator. I'll transform your PRD into working code through parallel agent orchestration.
+PRD Builder: I'm the PRD Builder. I'll build your software by assembling and coordinating a team of specialized builder agents.
 
 Please provide your PRD by either:
 1. Specifying a file path (e.g., "SPECTRA_RED_PRD_ENGINEERING_FOCUSED.md")

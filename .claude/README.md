@@ -27,12 +27,12 @@ Four major agent orchestration systems:
 
 **Architecture**: Architect-Planner agent + optional research agents
 
-### 4. PRD Execution System 🆕
-**Purpose**: Transform PRDs into working, production-ready software
+### 4. PRD Builder System 🆕
+**Purpose**: Build complete, production-ready software from PRDs using a team of intelligent agents
 
-**Command**: `/execute-prd`
+**Command**: `/build-prd`
 
-**Architecture**: Execution Orchestrator + 7 context agents + multiple parallel implementation agents
+**Architecture**: PRD Builder + 7 context research agents + team of parallel builder agents
 
 ---
 
@@ -176,47 +176,48 @@ Complete **Implementation Plan** with:
 
 ---
 
-## PRD Execution System 🆕
+## PRD Builder System 🆕
 
 ### Components
 
-#### Agent
-- **`prd-execution-orchestrator.md`** - Orchestrates end-to-end PRD execution from requirements to working code
-- **`feature-implementer.md`** - Specialized implementation agent for executing granular tasks
+#### Agents
+- **`prd-builder.md`** - The builder who assembles and coordinates a team of agents to build software
+- **`builder-agent.md`** - Team member who builds specific components from specifications
 
 #### Skill
 - **`current-state-analysis`** - Analyzes codebase to determine what exists vs what needs to be built
 
 #### Command
-- **`/execute-prd`** - Execute a complete PRD
+- **`/build-prd`** - Build a complete software implementation from a PRD
 
 ### Workflow
 
-1. **Analyze** PRD and extract all requirements (5-10 min)
-2. **Gather Context** - Launch 7 agents in parallel (5-10 min):
+1. **Analyze** PRD and understand what to build (5-10 min)
+2. **Assemble research team** - Deploy 7 context agents in parallel (5-10 min):
    - current-state-analysis (what exists vs needed)
-   - codebase-pattern-analysis
-   - file-structure-mapping
-   - dependency-research
-   - api-context-gathering
-   - integration-point-mapping
-   - technical-research
-3. **Plan** architecture and task breakdown (10-15 min)
-   - Uses architect-planner agent
-   - Creates granular, sequenced tasks
-   - Groups into parallel execution waves
-4. **Execute** in parallel waves (varies by PRD size):
-   - Wave 1: Foundation (database, types, interfaces)
-   - Wave 2: Core logic (services, business logic)
-   - Wave 3: Integrations (APIs, workflows, CLI)
-   - Wave 4: Testing and polish
-   - Each wave launches multiple feature-implementer agents in parallel
-5. **Validate** implementation (15-30 min):
+   - codebase-pattern-analysis (find reusable patterns)
+   - file-structure-mapping (understand organization)
+   - dependency-research (identify libraries)
+   - api-context-gathering (document APIs)
+   - integration-point-mapping (map connections)
+   - technical-research (best practices)
+3. **Create build plan** with architect-planner (10-15 min):
+   - Design technical architecture
+   - Break into buildable components
+   - Sequence by dependencies
+   - Organize into parallel build waves
+4. **Direct builder team** in parallel waves (varies by PRD size):
+   - Wave 1: Foundation team (database, types, interfaces)
+   - Wave 2: Core services team (business logic, services)
+   - Wave 3: Integration team (APIs, workflows, CLI)
+   - Wave 4: Quality team (testing and polish)
+   - Each wave: multiple builder agents working in parallel
+5. **Quality assurance** (15-30 min):
    - Run all tests
    - Perform integration testing
    - Verify PRD requirements
-   - Assess quality metrics
-6. **Report** completion with comprehensive summary (10 min)
+   - Assess build quality
+6. **Deliver** with comprehensive build report (10 min)
 
 **Total Time**:
 - Small PRD (1-2 weeks): 3-5 hours
@@ -225,67 +226,67 @@ Complete **Implementation Plan** with:
 
 ### Output
 
-Complete **Working Implementation** with:
+Complete **Working Software** with:
 - **Source Code**: All files created/modified with proper Go conventions
 - **Tests**: Comprehensive test suite with >80% coverage
 - **Documentation**: Godoc comments, README updates, architecture docs
 - **Build**: Fully buildable, all tests passing
-- **Execution Summary**:
+- **Build Report**:
   - Requirements completion checklist (P0/P1/P2)
-  - Implementation statistics (files, LOC, coverage)
+  - Build statistics (files, LOC, coverage)
   - Quality metrics (tests, linting, performance)
   - Outstanding issues and blockers
   - Next steps and recommendations
 
 ### Key Features
 
-- **End-to-End Execution**: Takes PRD, delivers working code
-- **Intelligent Orchestration**: Maximizes parallelization across 10+ agents
-- **Context-Aware**: Gathers comprehensive codebase state before starting
+- **Team-Based Building**: PRD Builder coordinates specialized builder agents
+- **Intelligent Coordination**: Maximizes parallelization across 10+ agents
+- **Context-Aware**: Research team gathers comprehensive codebase understanding
 - **Quality-Driven**: Tests, linting, and validation built-in
-- **Wave-Based Execution**: Sequences work by dependencies, runs independent tasks in parallel
+- **Wave-Based Building**: Sequences work by dependencies, parallel execution within waves
 - **Production-Ready**: Code follows conventions, includes tests, builds successfully
-- **Progress Tracking**: Clear visibility into execution progress and blockers
+- **Progress Tracking**: Clear visibility into build progress and team status
 - **Adaptive**: Handles blockers, adjusts plans, resolves issues automatically
 
 ### Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│               PRD Execution Orchestrator                     │
-│  - Analyzes PRD requirements                                 │
-│  - Coordinates all sub-agents                                │
-│  - Monitors progress and quality                             │
+│                    PRD Builder                               │
+│  - Analyzes what needs to be built                           │
+│  - Assembles and directs specialized agent teams             │
+│  - Monitors build progress and quality                       │
 └─────────────────┬───────────────────────────────────────────┘
                   │
         ┌─────────┴─────────┐
         │                   │
-  Context Gathering    Implementation
-    (Parallel)           (Wave-Based)
+  Research Team        Builder Team
+    (Parallel)          (Wave-Based)
         │                   │
         │                   │
 ┌───────▼──────────┐  ┌────▼─────────────────────────────────┐
-│  7 Research      │  │  Wave 1: Foundation                  │
-│  Agents          │  │  ├─ feature-implementer (DB schema)  │
-│  (Parallel)      │  │  ├─ feature-implementer (types)      │
-│                  │  │  └─ feature-implementer (config)     │
+│  7 Research      │  │  Wave 1: Foundation Team             │
+│  Agents          │  │  ├─ builder-agent (DB schema)        │
+│  (Concurrent)    │  │  ├─ builder-agent (types)            │
+│                  │  │  └─ builder-agent (config)           │
 │  1. current-     │  │                                      │
-│     state        │  │  Wave 2: Core Services               │
-│  2. codebase     │  │  ├─ feature-implementer (parser)     │
-│  3. file-struct  │  │  ├─ feature-implementer (enricher)   │
-│  4. dependencies │  │  └─ feature-implementer (query)      │
+│     state        │  │  Wave 2: Core Services Team          │
+│  2. codebase     │  │  ├─ builder-agent (parser)           │
+│  3. file-struct  │  │  ├─ builder-agent (enricher)         │
+│  4. dependencies │  │  └─ builder-agent (query)            │
 │  5. api-context  │  │                                      │
-│  6. integration  │  │  Wave 3: Integrations                │
-│  7. technical    │  │  ├─ feature-implementer (API)        │
-│                  │  │  ├─ feature-implementer (CLI)        │
-│  Runs: 5-10 min  │  │  └─ feature-implementer (workflows)  │
+│  6. integration  │  │  Wave 3: Integration Team            │
+│  7. technical    │  │  ├─ builder-agent (API)              │
+│                  │  │  ├─ builder-agent (CLI)              │
+│  Runs: 5-10 min  │  │  └─ builder-agent (workflows)        │
 └──────────────────┘  │                                      │
-                      │  Wave 4: Testing & Polish            │
-                      │  ├─ feature-implementer (tests)      │
-                      │  └─ feature-implementer (docs)       │
+                      │  Wave 4: Quality Team                │
+                      │  ├─ builder-agent (tests)            │
+                      │  └─ builder-agent (docs)             │
                       │                                      │
-                      │  Each wave: Independent tasks run    │
-                      │  in parallel, wait for completion    │
+                      │  Each wave: Team members work in     │
+                      │  parallel, wave completes together   │
                       └──────────────────────────────────────┘
 ```
 
